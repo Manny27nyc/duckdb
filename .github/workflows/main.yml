@@ -55,10 +55,10 @@ jobs:
     - name: Build
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64 -DBUILD_ICU_EXTENSION=1 -DBUILD_PARQUET_EXTENSION=1 -DBUILD_TPCH_EXTENSION=1 -DBUILD_FTS_EXTENSION=1 -DBUILD_REST=1 -DJDBC_DRIVER=1
-        cmake --build --parallel . --target duckdb --config Release
-        cmake --build --parallel . --target unittest --config Release
-        cmake --build --parallel . --target shell --config Release
-        cmake --build --parallel . --target jdbc --config Release
+        cmake --build . --target duckdb --config Release
+        cmake --build . --target unittest --config Release
+        cmake --build . --target shell --config Release
+        cmake --build . --target jdbc --config Release
 
     - name: Test
       run: test/Release/unittest.exe
@@ -102,10 +102,10 @@ jobs:
     - name: Build
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=Win32 -DBUILD_ICU_EXTENSION=1 -DBUILD_PARQUET_EXTENSION=1 -DBUILD_TPCH_EXTENSION=1 -DBUILD_FTS_EXTENSION=1 -DJDBC_DRIVER=1
-        cmake --build --parallel . --target duckdb --config Release
-        cmake --build --parallel . --target unittest --config Release
-        cmake --build --parallel . --target shell --config Release
-        cmake --build --parallel . --target jdbc --config Release
+        cmake --build . --target duckdb --config Release
+        cmake --build . --target unittest --config Release
+        cmake --build . --target shell --config Release
+        cmake --build . --target jdbc --config Release
 
     - name: Test
       run: test/Release/unittest.exe
@@ -292,7 +292,7 @@ jobs:
     - name: Build
       run: |
         mkdir -p build/release
-        (cd build/release && cmake -DSTATIC_LIBCPP=1 -DJDBC_DRIVER=1 -DBUILD_ICU_EXTENSION=1 -DBUILD_PARQUET_EXTENSION=1 -DBUILD_FTS_EXTENSION=1 -DFORCE_32_BIT=1 -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build --parallel .)
+        (cd build/release && cmake -DSTATIC_LIBCPP=1 -DJDBC_DRIVER=1 -DBUILD_ICU_EXTENSION=1 -DBUILD_PARQUET_EXTENSION=1 -DBUILD_FTS_EXTENSION=1 -DFORCE_32_BIT=1 -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build .)
 
     - name: Test
       run: build/release/test/unittest "*"
@@ -338,7 +338,7 @@ jobs:
         mkdir -p build/release
         cd build/release
         cmake -G Ninja -DBUILD_TPCH_EXTENSION=1 -DDUCKDB_RPI_TOOLCHAIN_PREFIX=$TOOLCHAIN -DBUILD_UNITTESTS=0 -DCMAKE_TOOLCHAIN_FILE=../../scripts/raspberry-pi-cmake-toolchain.cmake ../../
-        cmake --build --parallel .
+        cmake --build .
         file duckdb
 
     - name: Deploy

@@ -64,32 +64,32 @@ debug:
 	mkdir -p build/debug && \
 	cd build/debug && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${DISABLE_SANITIZER_FLAG} ${STATIC_LIBCPP} ${EXTENSIONS} -DCMAKE_BUILD_TYPE=Debug ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 ubsandebug:
 	mkdir -p build/ubsandebug && \
 	cd build/ubsandebug && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${DISABLE_SANITIZER_FLAG} ${STATIC_LIBCPP} ${EXTENSIONS}  -DENABLE_SANITIZER=0 -DENABLE_UBSAN=1 -DCMAKE_BUILD_TYPE=Debug ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 	build/ubsandebug/test/unittest
 
 release_expanded:
 	mkdir -p build/release_expanded && \
 	cd build/release_expanded && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${DISABLE_SANITIZER_FLAG} ${STATIC_LIBCPP} ${EXTENSIONS} -DCMAKE_BUILD_TYPE=Release ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 cldebug:
 	mkdir -p build/cldebug && \
 	cd build/cldebug && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${EXTENSIONS} -DBUILD_PYTHON=1 -DBUILD_R=1 -DENABLE_SANITIZER=0 -DCMAKE_BUILD_TYPE=Debug ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 clreldebug:
 	mkdir -p build/clreldebug && \
 	cd build/clreldebug && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${STATIC_LIBCPP} ${EXTENSIONS} -DBUILD_PYTHON=1 -DBUILD_R=1 -DENABLE_SANITIZER=0 -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 unittest: debug
 	build/debug/test/unittest
@@ -109,26 +109,26 @@ release:
 	mkdir -p build/release && \
 	cd build/release && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${DISABLE_SANITIZER_FLAG} ${STATIC_LIBCPP} ${EXTENSIONS} -DCMAKE_BUILD_TYPE=Release ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 reldebug:
 	mkdir -p build/reldebug && \
 	cd build/reldebug && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${DISABLE_SANITIZER_FLAG} ${STATIC_LIBCPP} ${EXTENSIONS} -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 relassert:
 	mkdir -p build/relassert && \
 	cd build/relassert && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${WARNINGS_AS_ERRORS} ${DISABLE_UNITY_FLAG} ${DISABLE_SANITIZER_FLAG} ${STATIC_LIBCPP} ${EXTENSIONS} -DFORCE_ASSERT=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 amaldebug:
 	mkdir -p build/amaldebug && \
 	python scripts/amalgamation.py && \
 	cd build/amaldebug && \
 	cmake $(GENERATOR) $(FORCE_COLOR) ${STATIC_LIBCPP} ${EXTENSIONS} -DAMALGAMATION_BUILD=1 -DCMAKE_BUILD_TYPE=Debug ../.. && \
-	cmake --build --parallel .
+	cmake --build .
 
 
 test_compile: # test compilation of individual cpp files
