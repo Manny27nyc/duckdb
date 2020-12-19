@@ -10,6 +10,7 @@ env:
   node_pre_gyp_accessKeyId: AKIAVBLKPL2ZW2T7TYFQ
   node_pre_gyp_secretAccessKey: ${{ secrets.NODE_PRE_GYP_SECRETACCESSKEY }}
   NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+  CMAKE_BUILD_PARALLEL_LEVEL: 2
 
 jobs:
 
