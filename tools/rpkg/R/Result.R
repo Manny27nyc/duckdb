@@ -72,6 +72,10 @@ list_to_df <- function(x) {
 }
 
 list_to_tibble <- function(x) {
+  if (!requireNamespace("tibble", quietly = TRUE)) {
+    stop("The package 'tibble' must be installed")
+  }
+
   # Convert any sub data frames to tibbles too
   sub_tibbled <- recursive_as_tibble(x)
   tibble::as_tibble(sub_tibbled)
