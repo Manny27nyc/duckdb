@@ -109,6 +109,9 @@ static void VectorToR(Vector &src_vec, size_t count, void *dest, uint64_t dest_o
 		case LogicalTypeId::LIST:
 			rtype = "list";
 			break;
+		case LogicalTypeId::STRUCT:
+			rtype = "data.frame";
+			break;
 		case LogicalTypeId::ENUM:
 			rtype = "factor";
 			break;
@@ -202,6 +205,24 @@ static SEXP allocate(const LogicalType &type, RProtector &r_varvalue, idx_t nrow
 	case LogicalTypeId::LIST:
 		varvalue = r_varvalue.Protect(NEW_LIST(nrows));
 		break;
+	case LogicalTypeId::STRUCT: {
+		cpp11::writable::list dest_list;
+
+		for (const auto &child : StructType::GetChildTypes(type)) {
+			const auto &name = child.first;
+			const auto &child_type = child.second;
+
+			RProtector child_protector;
+			auto dest_child = allocate(child_type, child_protector, nrows);
+			dest_list.push_back(cpp11::named_arg(name.c_str()) = std::move(dest_child));
+		}
+
+		dest_list.attr(R_ClassSymbol) = RStrings::get().dataframe_str;
+		dest_list.attr(R_RowNamesSymbol) = {NA_INTEGER, -static_cast<int>(nrows)};
+
+		varvalue = r_varvalue.Protect(cpp11::as_sexp(dest_list));
+		break;
+	}
 	case LogicalTypeId::VARCHAR: {
 		auto wrapper = new DuckDBAltrepStringWrapper();
 		wrapper->length = nrows;
@@ -419,6 +440,17 @@ static void transform(Vector &src_vec, SEXP &dest, idx_t dest_offset, idx_t n) {
 				SET_ELEMENT(dest, dest_offset + row_idx, list_element);
 			}
 		}
+		break;
+	}
+	case LogicalTypeId::STRUCT: {
+		const auto &children = StructVector::GetEntries(src_vec);
+
+		for (size_t i = 0; i < children.size(); i++) {
+			const auto &struct_child = children[i];
+			SEXP child_dest = VECTOR_ELT(dest, i);
+			transform(*struct_child, child_dest, dest_offset, n);
+		}
+
 		break;
 	}
 	case LogicalTypeId::BLOB: {

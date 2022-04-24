@@ -20,17 +20,19 @@ setClass("duckdb_connection",
     conn_ref = "externalptr",
     driver = "duckdb_driver",
     debug = "logical",
+    tibble = "logical",
     timezone_out = "character",
     tz_out_convert = "character"
   )
 )
 
-duckdb_connection <- function(duckdb_driver, debug) {
+duckdb_connection <- function(duckdb_driver, debug, tibble) {
   new(
     "duckdb_connection",
     conn_ref = rapi_connect(duckdb_driver@database_ref),
     driver = duckdb_driver,
     debug = debug,
+    tibble = tibble,
     timezone_out = "UTC",
     tz_out_convert = "with"
   )
