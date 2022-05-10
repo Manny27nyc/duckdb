@@ -56,6 +56,7 @@ Suggests:
     dbplyr,
     nycflights13,
     testthat,
+    tibble,
     vctrs,
     withr
 Encoding: UTF-8
