@@ -9,9 +9,6 @@
 #' @param ... Ignored
 #' @param debug Print additional debug information such as queries
 #' @param read_only Set to `TRUE` for read-only operation
-#' @param tibble Whether a [tibble::tbl_df] should be returned rather than
-#'   a [data.frame]. This is recommended if you are working with lists and structs
-#'   as tibbles, unlike regular data frames, can easily handle nested data.
 #' @param timezone_out The time zone returned to R, defaults to `"UTC"`, which
 #'   is currently the only timezone supported by duckdb.
 #'   If you want to display datetime values in the local timezone,

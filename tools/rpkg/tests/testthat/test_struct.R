@@ -1,13 +1,5 @@
-test_that("returns tibbles", {
-  con <- dbConnect(duckdb::duckdb(), tibble = TRUE)
-  on.exit(dbDisconnect(con, shutdown = TRUE))
-
-  res <- dbGetQuery(con, "SELECT 1 AS x")
-  expect_true(tibble::is_tibble(res))
-})
-
 test_that("structs can be read", {
-  con <- dbConnect(duckdb::duckdb(), tibble = TRUE)
+  con <- dbConnect(duckdb::duckdb())
   on.exit(dbDisconnect(con, shutdown = TRUE))
 
   res <- dbGetQuery(con, "SELECT {'x': 100, 'y': 'hello', 'z': 3.14} AS s")
@@ -32,11 +24,11 @@ test_that("structs can be read", {
 
   res <- dbGetQuery(con, "select 100 AS other, [{'x': 1, 'y': 'a'}, {'x': 2, 'y': 'b'}] AS s")
   expect_equal(res$other, 100)
-  expect_equal(res$s[[1]], tibble::tibble(x = c(1L, 2L), y = c("a", "b")))
+  expect_equal(res$s[[1]], data.frame(x = c(1L, 2L), y = c("a", "b")))
 
   res <- dbGetQuery(con, "values ([{'x': 1, 'y': 'a'}, {'x': 2, 'y': 'b'}]), ([]), ([{'x': 1, 'y': 'a'}])")
-  expect_equal(res$col0[[1]], tibble::tibble(x = c(1L, 2L), y = c("a", "b")))
-  expect_equal(res$col0[[2]], tibble::tibble(x = integer(0), y = character(0)))
-  expect_equal(res$col0[[3]], tibble::tibble(x = 1L, y = "a"))
+  expect_equal(res$col0[[1]], data.frame(x = c(1L, 2L), y = c("a", "b")))
+  expect_equal(res$col0[[2]], data.frame(x = integer(0), y = character(0)))
+  expect_equal(res$col0[[3]], data.frame(x = 1L, y = "a"))
 })
 
