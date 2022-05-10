@@ -62,7 +62,7 @@ list_to_df <- function(x) {
   if (is.data.frame(x)) {
     return(x)
   }
-  attr(x, "row.names") <- c(NA_integer_, -length(x[[1]]))
+  attr(x, "row.names") <- c(NA_integer_, -NROW(x[[1]]))
   class(x) <- "data.frame"
   x
 }
