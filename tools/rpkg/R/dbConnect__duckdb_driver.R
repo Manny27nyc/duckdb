@@ -41,7 +41,6 @@
 dbConnect__duckdb_driver <- function(drv, dbdir = DBDIR_MEMORY, ...,
                                      debug = getOption("duckdb.debug", FALSE),
                                      read_only = FALSE,
-                                     tibble = getOption("duckdb.tibble", FALSE),
                                      timezone_out = "UTC",
                                      tz_out_convert = c("with", "force"), config = list()) {
   check_flag(debug)
@@ -57,7 +56,7 @@ dbConnect__duckdb_driver <- function(drv, dbdir = DBDIR_MEMORY, ...,
     drv <- duckdb(dbdir, read_only, config)
   }
 
-  conn <- duckdb_connection(drv, debug = debug, tibble = tibble)
+  conn <- duckdb_connection(drv, debug = debug)
   on.exit(dbDisconnect(conn))
 
   conn@timezone_out <- timezone_out

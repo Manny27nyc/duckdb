@@ -20,7 +20,6 @@ duckdb_shutdown(drv)
   ...,
   debug = getOption("duckdb.debug", FALSE),
   read_only = FALSE,
-  tibble = getOption("duckdb.tibble", FALSE),
   timezone_out = "UTC",
   tz_out_convert = c("with", "force"),
   config = list()
@@ -42,10 +41,6 @@ data is kept in RAM}
 \item{...}{Ignored}
 
 \item{debug}{Print additional debug information such as queries}
-
-\item{tibble}{Whether a \link[tibble:tbl_df-class]{tibble::tbl_df} should be returned rather than
-a \link{data.frame}. This is recommended if you are working with lists and structs
-as tibbles, unlike regular data frames, can easily handle nested data.}
 
 \item{timezone_out}{The time zone returned to R, defaults to \code{"UTC"}, which
 is currently the only timezone supported by duckdb.
