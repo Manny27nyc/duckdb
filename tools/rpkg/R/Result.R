@@ -46,11 +46,7 @@ duckdb_execute <- function(res) {
 
 duckdb_post_execute <- function(res, out) {
   if (!res@arrow) {
-    if (res@connection@tibble) {
-      out <- list_to_tibble(out)
-    } else {
-      out <- list_to_df(out)
-    }
+    out <- list_to_df(out)
 
     if (!res@stmt_lst$type %in% c("SELECT", "EXPLAIN")) {
       res@env$rows_affected <- sum(as.numeric(out[[1]]))
@@ -69,24 +65,6 @@ list_to_df <- function(x) {
   attr(x, "row.names") <- c(NA_integer_, -length(x[[1]]))
   class(x) <- "data.frame"
   x
-}
-
-list_to_tibble <- function(x) {
-  if (!requireNamespace("tibble", quietly = TRUE)) {
-    stop("The package 'tibble' must be installed")
-  }
-
-  # Convert any sub data frames to tibbles too
-  sub_tibbled <- recursive_as_tibble(x)
-  tibble::as_tibble(sub_tibbled)
-}
-
-recursive_as_tibble <- function(x) {
-  lapply(x, function(y) {
-    if (is.data.frame(y)) { tibble::as_tibble(y) }
-    else if (is.list(y)) { recursive_as_tibble(y) }
-    else { y }
-  })
 }
 
 # as per is.integer documentation

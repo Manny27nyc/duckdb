@@ -56,7 +56,6 @@ Suggests:
     dbplyr,
     nycflights13,
     testthat,
-    tibble,
     withr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

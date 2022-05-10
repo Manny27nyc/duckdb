@@ -1,11 +1,3 @@
-test_that("returns tibbles", {
-  con <- dbConnect(duckdb::duckdb(), tibble = TRUE)
-  on.exit(dbDisconnect(con, shutdown = TRUE))
-
-  res <- dbGetQuery(con, "SELECT 1 AS x")
-  expect_true(tibble::is_tibble(res))
-})
-
 test_that("structs can be read", {
   con <- dbConnect(duckdb::duckdb(), tibble = TRUE)
   on.exit(dbDisconnect(con, shutdown = TRUE))
