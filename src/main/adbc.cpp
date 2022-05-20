@@ -128,3 +128,26 @@ void AdbcErrorRelease(struct AdbcError *error) {
 	}
 	error->message = nullptr;
 }
+
+
+extern "C" {
+AdbcStatusCode duckdb_adbc_driver_init(size_t count, struct AdbcDriver* driver,
+                                       size_t* initialized) {
+  if (count < ADBC_VERSION_0_0_1) return ADBC_STATUS_NOT_IMPLEMENTED;
+
+  memset(driver, 0, sizeof(*driver));
+  driver->ErrorRelease = AdbcErrorRelease;
+  driver->DatabaseInit = AdbcDatabaseInit;
+  driver->DatabaseRelease = AdbcDatabaseRelease;
+  driver->ConnectionInit = AdbcConnectionInit;
+  driver->ConnectionRelease = AdbcConnectionRelease;
+  driver->ConnectionSqlExecute = AdbcConnectionSqlExecute;
+  driver->StatementGetPartitionDesc = NULL; // AdbcStatementGetPartitionDesc;
+  driver->StatementGetPartitionDescSize = NULL; // AdbcStatementGetPartitionDescSize;
+  driver->StatementGetStream = AdbcStatementGetStream;
+  driver->StatementInit = AdbcStatementInit;
+  driver->StatementRelease = AdbcStatementRelease;
+  *initialized = ADBC_VERSION_0_0_1;
+  return ADBC_STATUS_OK;
+}
+}
