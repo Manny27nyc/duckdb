@@ -422,23 +422,74 @@ AdbcStatusCode AdbcStatementGetPartitionDesc(struct AdbcStatement *statement, ui
 /// \brief A table of function pointers for ADBC functions.
 ///
 /// This provides a common interface for implementation-specific
-/// driver initialization routines.
+/// driver initialization routines. Drivers should populate this
+/// struct, and applications can call ADBC functions through this
+/// struct, without worrying about multiple definitions of the same
+/// symbol.
 struct AdbcDriver {
-	/// \brief Opaque implementation-defined state.
-	/// This field is NULLPTR iff the connection is unintialized/freed.
-	void *private_data;
+  // TODO: migrate drivers
+
+  void (*ErrorRelease)(struct AdbcError*);
+  const char* (*StatusCodeMessage)(AdbcStatusCode);
+
+  AdbcStatusCode (*DatabaseInit)(const struct AdbcDatabaseOptions*, struct AdbcDatabase*,
+                                 struct AdbcError*);
+  AdbcStatusCode (*DatabaseRelease)(struct AdbcDatabase*, struct AdbcError*);
+
+  AdbcStatusCode (*ConnectionInit)(const struct AdbcConnectionOptions*,
+                                   struct AdbcConnection*, struct AdbcError*);
+  AdbcStatusCode (*ConnectionRelease)(struct AdbcConnection*, struct AdbcError*);
+  AdbcStatusCode (*ConnectionSqlExecute)(struct AdbcConnection*, const char*, size_t,
+                                         struct AdbcStatement*, struct AdbcError*);
+  AdbcStatusCode (*ConnectionSqlPrepare)(struct AdbcConnection*, const char*, size_t,
+                                         struct AdbcStatement*, struct AdbcError*);
+  AdbcStatusCode (*ConnectionDeserializePartitionDesc)(struct AdbcConnection*,
+                                                       const uint8_t*, size_t,
+                                                       struct AdbcStatement*,
+                                                       struct AdbcError*);
+
+  AdbcStatusCode (*ConnectionGetCatalogs)(struct AdbcConnection*, struct AdbcStatement*,
+                                          struct AdbcError*);
+  AdbcStatusCode (*ConnectionGetDbSchemas)(struct Connection*, struct AdbcStatement*,
+                                           struct AdbcError*);
+  AdbcStatusCode (*ConnectionGetTableTypes)(struct AdbcConnection*, struct AdbcStatement*,
+                                            struct AdbcError*);
+  AdbcStatusCode (*ConnectionGetTables)(struct AdbcConnection*, const char*, size_t,
+                                        const char*, size_t, const char*, size_t,
+                                        const char**, size_t, struct AdbcStatement*,
+                                        struct AdbcError*);
+
+  AdbcStatusCode (*StatementInit)(struct AdbcConnection*, struct AdbcStatement*,
+                                  struct AdbcError*);
+  AdbcStatusCode (*StatementSetOptionInt64)(struct AdbcStatement*, struct AdbcError*);
+  AdbcStatusCode (*StatementRelease)(struct AdbcStatement*, struct AdbcError*);
+  AdbcStatusCode (*StatementGetStream)(struct AdbcStatement*, struct ArrowArrayStream*,
+                                       struct AdbcError*);
+  AdbcStatusCode (*StatementGetPartitionDescSize)(struct AdbcStatement*, size_t*,
+                                                  struct AdbcError*);
+  AdbcStatusCode (*StatementGetPartitionDesc)(struct AdbcStatement*, uint8_t*,
+                                              struct AdbcError*);
+  // Do not edit fields. New fields can only be appended to the end.
 };
 
-/// \brief Common entry point for drivers using dlopen(3).
+/// \brief Common entry point for drivers via the driver manager
+///   (which uses dlopen(3)/LoadLibrary). The driver manager is told
+///   to load a library and call a function of this type to load the
+///   driver.
 ///
 /// \param[in] count The number of entries to initialize. Provides
 ///   backwards compatibility if the struct definition is changed.
 /// \param[out] driver The table of function pointers to initialize.
 /// \param[out] initialized How much of the table was actually
 ///   initialized (can be less than count).
-/// \param[out] error An optional location to return an error message if
-///   necessary.
-AdbcStatusCode AdbcDriverInit(size_t count, struct AdbcDriver *driver, size_t *initialized, struct AdbcError *error);
+typedef AdbcStatusCode (*AdbcDriverInitFunc)(size_t count, struct AdbcDriver* driver,
+                                             size_t* initialized);
+// TODO: how best to report errors here?
+// TODO: use sizeof() instead of count, or version the
+// struct/entrypoint instead?
+
+// For use with count
+#define ADBC_VERSION_0_0_1 19
 
 /// }@
 
