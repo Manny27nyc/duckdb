@@ -95,7 +95,7 @@ jobs:
         R CMD check --use-valgrind -o /tmp duckdb_*.tar.gz
 
     - name: Print R log on failure
-      if: ${{ failure() }}
+      if: ${{ always() }}
       run: |
         ls -R /tmp/duckdb.Rcheck
         cat /tmp/duckdb.Rcheck/00check.log
