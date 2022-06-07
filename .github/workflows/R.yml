@@ -99,4 +99,4 @@ jobs:
       run: |
         ls -R /tmp/duckdb.Rcheck
         cat /tmp/duckdb.Rcheck/00check.log
-        cat /tmp/duckdb.Rcheck/tests/testthat.Rout.fail
+        find /tmp/duckdb.Rcheck/ -type f -name "*.Rout*" -print0 | tee /dev/stderr | xargs -0 cat
