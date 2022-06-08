@@ -220,6 +220,8 @@ static SEXP allocate(const LogicalType &type, RProtector &r_varvalue, idx_t nrow
 			dest_list.push_back(cpp11::named_arg(name.c_str()) = std::move(dest_child));
 		}
 
+		// Note we cannot use cpp11's data frame here as it tries to calculate the number of rows itself,
+		// but gives the wrong answer if the first column is another data frame or the struct is empty.
 		dest_list.attr(R_ClassSymbol) = RStrings::get().dataframe_str;
 		dest_list.attr(R_RowNamesSymbol) = {NA_INTEGER, -static_cast<int>(nrows)};
 
@@ -526,17 +528,23 @@ static SEXP duckdb_execute_R_impl(MaterializedQueryResult *result) {
 	}
 
 	uint64_t nrows = result->collection.Count();
-	cpp11::list retlist(NEW_LIST(ncols));
-	SET_NAMES(retlist, StringsToSexp(result->names));
+
+	// Note we cannot use cpp11's data frame here as it tries to calculate the number of rows itself,
+	// but gives the wrong answer if the first column is another data frame. So we set the necessary
+	// attributes manually.
+	cpp11::writable::list data_frame(NEW_LIST(ncols));
+	data_frame.attr(R_ClassSymbol) = RStrings::get().dataframe_str;
+	data_frame.attr(R_RowNamesSymbol) = {NA_INTEGER, -static_cast<int>(nrows)};
+	SET_NAMES(data_frame, StringsToSexp(result->names));
 
 	for (size_t col_idx = 0; col_idx < ncols; col_idx++) {
 		// TODO move the protector to allocate?
 		RProtector r_varvalue;
 		auto varvalue = allocate(result->types[col_idx], r_varvalue, nrows);
-		SET_VECTOR_ELT(retlist, col_idx, varvalue);
+		SET_VECTOR_ELT(data_frame, col_idx, varvalue);
 	}
 
-	// at this point retlist is fully allocated and the only protected SEXP
+	// at this point data_frame is fully allocated and the only protected SEXP
 
 	// step 3: set values from chunks
 	uint64_t dest_offset = 0;
@@ -548,9 +556,9 @@ static SEXP duckdb_execute_R_impl(MaterializedQueryResult *result) {
 		}
 
 		D_ASSERT(chunk->ColumnCount() == ncols);
-		D_ASSERT(chunk->ColumnCount() == (idx_t)Rf_length(retlist));
+		D_ASSERT(chunk->ColumnCount() == (idx_t)Rf_length(data_frame));
 		for (size_t col_idx = 0; col_idx < chunk->ColumnCount(); col_idx++) {
-			SEXP dest = VECTOR_ELT(retlist, col_idx);
+			SEXP dest = VECTOR_ELT(data_frame, col_idx);
 			transform(chunk->data[col_idx], dest, dest_offset, chunk->size());
 		}
 		dest_offset += chunk->size();
@@ -558,7 +566,7 @@ static SEXP duckdb_execute_R_impl(MaterializedQueryResult *result) {
 	}
 
 	D_ASSERT(dest_offset == nrows);
-	return retlist;
+	return data_frame;
 }
 
 struct AppendableRList {
