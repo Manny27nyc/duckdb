@@ -8,7 +8,7 @@ runs:
   using: "composite"
   steps:
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         apt-get update -y -qq
         apt-get install -y -qq software-properties-common
@@ -17,7 +17,7 @@ runs:
         apt-get install -y -qq ninja-build make gcc-multilib g++-multilib libssl-dev wget openjdk-8-jdk zip maven unixodbc-dev libc6-dev-i386 lib32readline6-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip build-essential checkinstall libffi-dev
 
     - name: Install Git 2.18.5
-      shell: bash
+      shell: true {0}
       run: |
         wget https://github.com/git/git/archive/refs/tags/v2.18.5.tar.gz
         tar xvf v2.18.5.tar.gz
@@ -31,7 +31,7 @@ runs:
         fetch-depth: 0
 
     - name: Install Python 3.7
-      shell: bash
+      shell: true {0}
       run: |
         wget https://www.python.org/ftp/python/3.7.12/Python-3.7.12.tgz
         tar xvf Python-3.7.12.tgz
@@ -45,7 +45,7 @@ runs:
         python3.7 -m pip install requests awscli
 
     - name: Install CMake 3.21
-      shell: bash
+      shell: true {0}
       run: |
         wget https://github.com/Kitware/CMake/releases/download/v3.21.3/cmake-3.21.3-linux-x86_64.sh
         chmod +x cmake-3.21.3-linux-x86_64.sh
@@ -54,7 +54,7 @@ runs:
 
     - name: Install OpenSSL 1.1.1
       if: ${{ inputs.openssl }} == 1
-      shell: bash
+      shell: true {0}
       run: |
         wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
         tar -xf openssl-1.1.1c.tar.gz
@@ -66,7 +66,7 @@ runs:
         ldconfig -v
 
     - name: Version Check
-      shell: bash
+      shell: true {0}
       run: |
         ldd --version ldd
         python3.7 --version

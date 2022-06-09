@@ -62,7 +62,7 @@ runs:
   using: "composite"
   steps:
     - name: Build
-      shell: bash
+      shell: true {0}
       env:
         BUILD_VISUALIZER: ${{ inputs.visualizer }}
         BUILD_ICU: ${{ inputs.icu }}
@@ -89,13 +89,13 @@ runs:
 
     - name: Run post-install scripts
       if: ${{ inputs.post_install != '' }}
-      shell: bash
+      shell: true {0}
       run: |
         ${{ inputs.post_install }}
 
     - name: Deploy
       if: ${{ inputs.deploy_as != '' }}
-      shell: bash
+      shell: true {0}
       env:
         AWS_ACCESS_KEY_ID: ${{ inputs.s3_id }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.s3_key }}
@@ -107,7 +107,7 @@ runs:
 
     - name: Test
       if: ${{ inputs.run_tests == 1 }}
-      shell: bash
+      shell: true {0}
       env:
         AWS_ACCESS_KEY_ID: ${{ inputs.s3_id }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.s3_key }}

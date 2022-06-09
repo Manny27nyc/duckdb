@@ -19,7 +19,7 @@ concurrency:
 
 defaults:
   run:
-    shell: bash
+    shell: true {0}
 
 jobs:
   format_check:
@@ -36,7 +36,7 @@ jobs:
           arch: x64
 
       - name: Format Check
-        shell: bash
+        shell: true {0}
         run: |
           cd tools/juliapkg
           julia -e "import Pkg; Pkg.add(\"JuliaFormatter\")"
@@ -72,12 +72,12 @@ jobs:
           key: ${{ github.job }}-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.version }}
 
       - name: Build DuckDB
-        shell: bash
+        shell: true {0}
         run: |
           BUILD_TPCH=1 make
 
       - name: Run Tests
-        shell: bash
+        shell: true {0}
         run: |
           export JULIA_DUCKDB_LIBRARY="`pwd`/build/release/src/libduckdb.so"
           export JULIA_NUM_THREADS=2
