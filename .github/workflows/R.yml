@@ -42,4 +42,4 @@ jobs:
     - name: Run
       run: |
         (cd tools/rpkg && ./configure && R CMD build .)
-        docker run -v `pwd`:/duckdb --cap-add SYS_PTRACE wch1/r-debug:latest bash -c /duckdb/tools/scripts/r_ubsan.sh
+        docker run -v `pwd`:/duckdb --cap-add SYS_PTRACE wch1/r-debug:latest bash -c /duckdb/scripts/r_ubsan.sh
