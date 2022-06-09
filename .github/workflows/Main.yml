@@ -19,7 +19,7 @@ concurrency:
 
 defaults:
   run:
-    shell: bash
+    shell: true {0}
 
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -54,7 +54,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
@@ -64,12 +64,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
          make debug
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
         make unittestci
 
@@ -97,7 +97,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
@@ -107,12 +107,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         make reldebug
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
         build/reldebug/test/unittest "*" --force-storage
 
@@ -133,7 +133,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install
-        shell: bash
+        shell: true {0}
         run: |
           sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
@@ -143,12 +143,12 @@ jobs:
           key: ${{ github.job }}
 
       - name: Build
-        shell: bash
+        shell: true {0}
         run: |
           BUILD_ARROW_ABI_TEST=1 make debug
 
       - name: Test
-        shell: bash
+        shell: true {0}
         run: |
           make unittestarrow
 
@@ -175,7 +175,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
@@ -185,12 +185,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         THREADSAN=1 make reldebug
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
           python3 scripts/run_tests_one_by_one.py build/reldebug/test/unittest
           python3 scripts/run_tests_one_by_one.py build/reldebug/test/unittest "[intraquery]"
@@ -215,7 +215,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build valgrind
 
@@ -225,12 +225,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         make debug
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
         valgrind ./build/debug/test/unittest test/sql/tpch/tpch_sf001.test_slow
 
@@ -244,7 +244,7 @@ jobs:
         fetch-depth: 0
 
     - name: Clone Website
-      shell: bash
+      shell: true {0}
       run: |
         git clone https://github.com/duckdb/duckdb-web
 
@@ -254,7 +254,7 @@ jobs:
         python-version: '3.9'
 
     - name: Package
-      shell: bash
+      shell: true {0}
       run: |
         cd duckdb-web
         python3 scripts/generate_docs.py ..
@@ -274,7 +274,7 @@ jobs:
         fetch-depth: 0
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
         make sqlite
 
@@ -295,7 +295,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
@@ -305,7 +305,7 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         make debug
 
@@ -324,7 +324,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
         git clone https://github.com/hannesmuehleisen/sqlancer
@@ -338,12 +338,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         make reldebug
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
         cp build/reldebug/tools/jdbc/duckdb_jdbc.jar sqlancer/target/lib/duckdb_jdbc-*.jar
         python3 scripts/run_sqlancer.py
@@ -365,7 +365,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
         git clone https://github.com/hannesmuehleisen/sqlancer
@@ -379,12 +379,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         make reldebug
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
         cp build/reldebug/tools/jdbc/duckdb_jdbc.jar sqlancer/target/lib/duckdb_jdbc-*.jar
         python3 scripts/run_sqlancer.py --persistent
@@ -407,7 +407,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
         git clone https://github.com/cwida/jdbccts.git
@@ -418,12 +418,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         make release
 
     - name: Test
-      shell: bash
+      shell: true {0}
       run: |
         (cd jdbccts && make DUCKDB_JAR=../build/release/tools/jdbc/duckdb_jdbc.jar test)
 
@@ -445,19 +445,19 @@ jobs:
         python-version: '3.7'
 
     - name: Dependencies
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build unixodbc-dev python3 python3-pyodbc python3-pip julia
         pip3 install pyodbc
 
     - name: Install nanodbc
-      shell: bash
+      shell: true {0}
       run: |
         wget https://github.com/nanodbc/nanodbc/archive/refs/tags/v2.13.0.tar.gz -O nanodbc.tgz
         (mkdir nanodbc && tar xvf nanodbc.tgz -C nanodbc --strip-components=1 && cd nanodbc && sed -i -e "s/set(test_list/set(test_list odbc/" test/CMakeLists.txt && mkdir build && cd build && cmake -DNANODBC_DISABLE_TESTS=OFF .. && cmake --build .)
 
     - name: Install psqlodbc
-      shell: bash
+      shell: true {0}
       run: |
         git clone https://github.com/Mytherin/psqlodbc.git
         (cd psqlodbc && git checkout 89726c417d1ea8b4080e486fe240725a79eca0d6 && make debug)
@@ -468,37 +468,37 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         DISABLE_SANITIZER=1 make debug
 
     - name: Test nanodbc
-      shell: bash
+      shell: true {0}
       run: |
         ./tools/odbc/test/run_nanodbc_tests.sh
 
     - name: Test psqlodbc
-      shell: bash
+      shell: true {0}
       run: |
         ./tools/odbc/test/run_psqlodbc_tests.sh
 
     - name: Test isql
-      shell: bash
+      shell: true {0}
       run: |
         ./tools/odbc/test/run_isql_tests.sh
 
     - name: Test R ODBC
-      shell: bash
+      shell: true {0}
       run: |
         R -f tools/odbc/test/rodbc.R
 
     - name: Test Python ODBC
-      shell: bash
+      shell: true {0}
       run: |
         ./tools/odbc/test/run_pyodbc_tests.sh
 
     - name: Test Julia ODBC
-      shell: bash
+      shell: true {0}
       run: |
         export ASAN_OPTIONS=verify_asan_link_order=0
         julia tools/odbc/test/julia-test.jl

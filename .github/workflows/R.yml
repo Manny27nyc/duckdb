@@ -20,7 +20,7 @@ concurrency:
 
 defaults:
   run:
-    shell: bash
+    shell: true {0}
 
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -76,14 +76,14 @@ jobs:
     - name: Install
       env:
         GITHUB_PAT: ${{ github.token }}
-      shell: bash
+      shell: true {0}
       run: |
         sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build texlive-latex-base texlive-fonts-extra libcurl4-openssl-dev valgrind pandoc
         mkdir -p $HOME/.R
         R -f tools/rpkg/dependencies.R
 
     - name: Prepare
-      shell: bash
+      shell: true {0}
       run: |
         mkdir -p /tmp/duckdb_extensions
         cd tools/rpkg
@@ -96,7 +96,7 @@ jobs:
         path: /tmp/duckdb_extensions
 
     - name: Tests
-      shell: bash
+      shell: true {0}
       run: |
         ls /tmp/duckdb_extensions
         cd tools/rpkg
@@ -104,14 +104,14 @@ jobs:
         (cd tests && DUCKDB_R_TEST_EXTENSION_REQUIRED=1 R -f testthat.R)
 
     - name: R CMD check
-      shell: bash
+      shell: true {0}
       run: |
         cd tools/rpkg
         R CMD check --as-cran -o /tmp duckdb_*.tar.gz
         if grep WARNING /tmp/duckdb.Rcheck/00check.log ; then exit 1; fi
 
     - name: Valgrind
-      shell: bash
+      shell: true {0}
       run: |
         cd tools/rpkg
         export NOT_CRAN='false'
@@ -120,21 +120,21 @@ jobs:
     - name: Coverage
       env:
         DUCKDB_R_DEBUG: 1
-      shell: Rscript {0}
+      shell: true {0}
       run: |
         pkgload::load_all("tools/rpkg")
         cov <- covr::codecov("tools/rpkg", relative_path = ".")
 
     - name: Print R log on failure
       if: ${{ failure() }}
-      shell: bash
+      shell: true {0}
       run: |
         ls -R /tmp/duckdb.Rcheck
         cat /tmp/duckdb.Rcheck/00check.log
         cat /tmp/duckdb.Rcheck/tests/testthat.Rout.fail
 
     - name: Deploy
-      shell: bash
+      shell: true {0}
       run: |
         python scripts/asset-upload-gha.py duckdb_r_src.tar.gz=tools/rpkg/duckdb_*.tar.gz
 
@@ -157,12 +157,12 @@ jobs:
         r-version: 'devel'
 
     - name: Install
-      shell: bash
+      shell: true {0}
       run: |
         R -f tools/rpkg/dependencies.R
 
     - name: Build
-      shell: bash
+      shell: true {0}
       run: |
         cd tools/rpkg
         ./configure
@@ -183,14 +183,14 @@ jobs:
         fetch-depth: 0
 
     - name: Run
-      shell: bash
+      shell: true {0}
       run: |
         (cd tools/rpkg && ./configure && R CMD build .)
         docker run -v `pwd`:/duckdb --cap-add SYS_PTRACE wch1/r-debug:latest bash -c "mkdir -p ~/.R && echo -e \"PKG_CFLAGS=-fno-sanitize-recover=all\\nPKG_CXXFLAGS=-fno-sanitize-recover=all\" > ~/.R/Makevars && export CMAKE_UNITY_BUILD=OFF ARROW_R_DEV=TRUE LIBARROW_BINARY=true && cd /duckdb/tools/rpkg/ && RDsan -f dependencies.R && RDsan CMD INSTALL duckdb_*.tar.gz && cd tests && UBSAN_OPTIONS=print_stacktrace=1 RDsan -f testthat.R"
 
     - name: Print R log on failure
       if: ${{ failure() }}
-      shell: bash
+      shell: true {0}
       run: |
         cat duckdb.Rcheck/00check.log
         cat duckdb.Rcheck/tests/testthat.Rout.fail
