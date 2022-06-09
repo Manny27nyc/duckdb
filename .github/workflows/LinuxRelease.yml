@@ -53,10 +53,12 @@ jobs:
     - uses: ./.github/actions/ubuntu_16_setup
 
     - name: Build
-      run: STATIC_LIBCPP=1 BUILD_ODBC=1 make
+      run: |
+        STATIC_LIBCPP=1 BUILD_ODBC=1 make
 
     - name: Test
-      run: make allunit
+      run: |
+        make allunit
 
     - name: Tools Tests
       run: |
@@ -131,7 +133,8 @@ jobs:
         (cd build/release && cmake -DSTATIC_LIBCPP=1 -DJDBC_DRIVER=1 -DBUILD_ICU_EXTENSION=1 -DBUILD_PARQUET_EXTENSION=1 -DBUILD_FTS_EXTENSION=1 -DBUILD_JSON_EXTENSION=1 -DBUILD_EXCEL_EXTENSION=1 -DFORCE_32_BIT=1 -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build .)
 
     - name: Test
-      run: build/release/test/unittest "*"
+      run: |
+        build/release/test/unittest "*"
 
     - name: Deploy
       run: |
@@ -215,7 +218,8 @@ jobs:
         python-version: '3.7'
 
     - name: Install
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq g++-4.8 binutils
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq g++-4.8 binutils
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -223,10 +227,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make release
+      run: |
+        make release
 
     - name: Test
-      run: make allunit
+      run: |
+        make allunit
 
  release-assert:
     name: Release Assertions
@@ -251,7 +257,8 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -259,7 +266,8 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make relassert
+      run: |
+        make relassert
 
     - name: Test
       run: |
@@ -289,7 +297,8 @@ jobs:
         key: ${{ github.job }}
 
     - name: Test
-      run: python scripts/test_vector_sizes.py
+      run: |
+        python scripts/test_vector_sizes.py
 
  linux-wasm-release:
     name: WebAssembly Release
@@ -301,10 +310,12 @@ jobs:
         fetch-depth: 0
 
     - name: Build Amalgamation
-      run: python scripts/amalgamation.py
+      run: |
+        python scripts/amalgamation.py
 
     - name: Setup
-      run: ./scripts/wasm_configure.sh
+      run: |
+        ./scripts/wasm_configure.sh
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -312,13 +323,16 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build Library Module
-      run: ./scripts/wasm_build_lib.sh Release
+      run: |
+        ./scripts/wasm_build_lib.sh Release
 
     - name: Build Test Module
-      run: ./scripts/wasm_build_test.sh Release
+      run: |
+        ./scripts/wasm_build_test.sh Release
 
     - name: Test WASM Module
-      run: node ./test/wasm/hello_wasm_test.js
+      run: |
+        node ./test/wasm/hello_wasm_test.js
 
     - name: Package
       run: |
@@ -351,10 +365,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make
+      run: |
+        make
 
     - name: Symbol Leakage Test
-      run: python3.7 scripts/exported_symbols_check.py build/release/src/libduckdb*.so
+      run: |
+        python3.7 scripts/exported_symbols_check.py build/release/src/libduckdb*.so
 
  linux-httpfs:
     name: Linux HTTPFS
@@ -376,7 +392,8 @@ jobs:
         python-version: '3.7'
 
     - name: Install Ninja
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -384,7 +401,8 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make
+      run: |
+        make
 
     - name: Start S3/HTTP test server
       run: |
@@ -392,7 +410,8 @@ jobs:
         ./scripts/run_s3_test_server.sh
 
     - name: Test
-      run: make allunit
+      run: |
+        make allunit
 
  amalgamation-tests:
     name: Amalgamation Tests
@@ -417,7 +436,8 @@ jobs:
         version: "10.0"
 
     - name: Generate Amalgamation
-      run:  |
+      run: |
+         |
           python scripts/amalgamation.py --extended
           python scripts/parquet_amalgamation.py
           clang++ -std=c++17 -Isrc/amalgamation src/amalgamation/parquet-amalgamation.cpp src/amalgamation/duckdb.cpp -emit-llvm -S -O0

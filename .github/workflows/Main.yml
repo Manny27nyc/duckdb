@@ -54,7 +54,8 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -62,10 +63,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run:  make debug
+      run: |
+         make debug
 
     - name: Test
-      run: make unittestci
+      run: |
+        make unittestci
 
 
  force-storage:
@@ -91,7 +94,8 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -99,10 +103,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make reldebug
+      run: |
+        make reldebug
 
     - name: Test
-      run: build/reldebug/test/unittest "*" --force-storage
+      run: |
+        build/reldebug/test/unittest "*" --force-storage
 
 
  linux-arrow:
@@ -121,7 +127,8 @@ jobs:
           fetch-depth: 0
 
       - name: Install
-        run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
+        run: |
+          sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
       - name: Setup Ccache
         uses: hendrikmuhs/ccache-action@main
@@ -129,10 +136,12 @@ jobs:
           key: ${{ github.job }}
 
       - name: Build
-        run: BUILD_ARROW_ABI_TEST=1 make debug
+        run: |
+          BUILD_ARROW_ABI_TEST=1 make debug
 
       - name: Test
-        run: make unittestarrow
+        run: |
+          make unittestarrow
 
  threadsan:
     name: Thread Sanitizer
@@ -157,7 +166,8 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -165,7 +175,8 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: THREADSAN=1 make reldebug
+      run: |
+        THREADSAN=1 make reldebug
 
     - name: Test
       run: |
@@ -192,7 +203,8 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build valgrind
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build valgrind
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -200,10 +212,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make debug
+      run: |
+        make debug
 
     - name: Test
-      run: valgrind ./build/debug/test/unittest test/sql/tpch/tpch_sf001.test_slow
+      run: |
+        valgrind ./build/debug/test/unittest test/sql/tpch/tpch_sf001.test_slow
 
  docs:
     name: Website Docs
@@ -215,7 +229,8 @@ jobs:
         fetch-depth: 0
 
     - name: Clone Website
-      run: git clone https://github.com/duckdb/duckdb-web
+      run: |
+        git clone https://github.com/duckdb/duckdb-web
 
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
@@ -242,7 +257,8 @@ jobs:
         fetch-depth: 0
 
     - name: Test
-      run: make sqlite
+      run: |
+        make sqlite
 
  expanded:
     name: Expanded
@@ -261,7 +277,8 @@ jobs:
         fetch-depth: 0
 
     - name: Install
-      run: sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
+      run: |
+        sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -269,7 +286,8 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make debug
+      run: |
+        make debug
 
  sqlancer:
     name: SQLancer
@@ -299,7 +317,8 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make reldebug
+      run: |
+        make reldebug
 
     - name: Test
       run: |
@@ -336,7 +355,8 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make reldebug
+      run: |
+        make reldebug
 
     - name: Test
       run: |
@@ -371,10 +391,12 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: make release
+      run: |
+        make release
 
     - name: Test
-      run: (cd jdbccts && make DUCKDB_JAR=../build/release/tools/jdbc/duckdb_jdbc.jar test)
+      run: |
+        (cd jdbccts && make DUCKDB_JAR=../build/release/tools/jdbc/duckdb_jdbc.jar test)
 
  odbc:
     name: ODBC
@@ -414,22 +436,28 @@ jobs:
         key: ${{ github.job }}
 
     - name: Build
-      run: DISABLE_SANITIZER=1 make debug
+      run: |
+        DISABLE_SANITIZER=1 make debug
 
     - name: Test nanodbc
-      run: ./tools/odbc/test/run_nanodbc_tests.sh
+      run: |
+        ./tools/odbc/test/run_nanodbc_tests.sh
 
     - name: Test psqlodbc
-      run: ./tools/odbc/test/run_psqlodbc_tests.sh
+      run: |
+        ./tools/odbc/test/run_psqlodbc_tests.sh
 
     - name: Test isql
-      run: ./tools/odbc/test/run_isql_tests.sh
+      run: |
+        ./tools/odbc/test/run_isql_tests.sh
 
     - name: Test R ODBC
-      run: R -f tools/odbc/test/rodbc.R
+      run: |
+        R -f tools/odbc/test/rodbc.R
 
     - name: Test Python ODBC
-      run: ./tools/odbc/test/run_pyodbc_tests.sh
+      run: |
+        ./tools/odbc/test/run_pyodbc_tests.sh
 
     - name: Test Julia ODBC
       run: |

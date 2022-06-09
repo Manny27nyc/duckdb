@@ -52,7 +52,8 @@ jobs:
         python-version: '3.7'
 
     - name: Install
-      run: pip install cibuildwheel twine
+      run: |
+        pip install cibuildwheel twine
 
     - name: Setup Ccache
       uses: hendrikmuhs/ccache-action@main
@@ -167,7 +168,8 @@ jobs:
         python-version: '3.7'
 
     - name: Install
-      run: pip install cibuildwheel twine
+      run: |
+        pip install cibuildwheel twine
 
     - uses: actions/download-artifact@v3
       if: ${{ matrix.arch == 'x86_64' }}
@@ -228,7 +230,8 @@ jobs:
           python-version: '3.7'
 
       - name: Install
-        run: pip install cibuildwheel twine
+        run: |
+          pip install cibuildwheel twine
 
       - name: Setup Ccache
         uses: hendrikmuhs/ccache-action@main
@@ -288,7 +291,8 @@ jobs:
           python-version: '3.7'
 
       - name: Install
-        run: pip install cibuildwheel twine
+        run: |
+          pip install cibuildwheel twine
 
       - name: Setup Ccache
         uses: hendrikmuhs/ccache-action@main
@@ -325,7 +329,8 @@ jobs:
           python-version: '3.7'
 
       - name: Install
-        run: pip install numpy pytest pandas mypy psutil
+        run: |
+          pip install numpy pytest pandas mypy psutil
 
       - name: Setup Ccache
         uses: hendrikmuhs/ccache-action@main
@@ -364,4 +369,5 @@ jobs:
           python-version: '3.7'
 
       - name: Cleanup Releases
-        run: python3 scripts/pypi_cleanup.py
+        run: |
+          python3 scripts/pypi_cleanup.py
