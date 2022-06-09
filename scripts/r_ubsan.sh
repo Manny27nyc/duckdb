@@ -17,5 +17,6 @@ RDsan -e 'writeLines(c("library(duckdb)", capture.output(invisible(lapply(dir("m
 RDsan -f dependencies.R
 RDsan CMD INSTALL .
 
-UBSAN_OPTIONS=print_stacktrace=1 RDsan -f tests/testthat.R
 UBSAN_OPTIONS=print_stacktrace=1 RDsan -f examples.R
+cd tests
+UBSAN_OPTIONS=print_stacktrace=1 RDsan -f testthat.R
