@@ -3,59 +3,59 @@ description: "Build, test and deploy the in-tree DuckDB extensions"
 inputs:
   # Test config
   run_tests:
-    description: 'Run extension tests after build'
+    description: "Run extension tests after build"
     default: 1
 
   # Deploy config
   deploy_as:
-    description: 'Binary name for deploy step'
-    default: ''
+    description: "Binary name for deploy step"
+    default: ""
   s3_id:
-    description: 'S3 key ID'
-    default: ''
+    description: "S3 key ID"
+    default: ""
   s3_key:
-    description: 'S3 key secret'
-    default: ''
+    description: "S3 key secret"
+    default: ""
 
   # Build config
   force_32_bit:
-    description: 'Force the 32 bit build'
+    description: "Force the 32 bit build"
     default: 0
   static_link_build:
-    description: 'Links duckdb statically to the built extensions'
+    description: "Links duckdb statically to the built extensions"
     default: 0
   openssl_path:
-    description: 'Directory of OpenSSL installation'
-    default: '/usr/local/ssl'
+    description: "Directory of OpenSSL installation"
+    default: "/usr/local/ssl"
   post_install:
-    description: 'Post-install scripts to run'
-    default: ''
+    description: "Post-install scripts to run"
+    default: ""
   treat_warn_as_error:
-    description: 'Treat compilation warnings as errors'
+    description: "Treat compilation warnings as errors"
     default: 1
   visualizer:
-    description: 'Build Visualizer'
+    description: "Build Visualizer"
     default: 1
   icu:
-    description: 'Build ICU'
+    description: "Build ICU"
     default: 1
   tpch:
-    description: 'Build TPCH'
+    description: "Build TPCH"
     default: 1
   tpcds:
-    description: 'Build TPCDS'
+    description: "Build TPCDS"
     default: 1
   httpfs:
-    description: 'Build HTTPFS'
+    description: "Build HTTPFS"
     default: 1
   fts:
-    description: 'Build FTS'
+    description: "Build FTS"
     default: 1
   json:
-    description: 'Build JSON'
+    description: "Build JSON"
     default: 1
   excel:
-    description: 'Build Excel'
+    description: "Build Excel"
     default: 1
 
 runs:

@@ -1,18 +1,18 @@
 name: Julia
 on:
-   push:
-     paths-ignore:
-       - '**.md'
-   pull_request:
-     paths-ignore:
-       - '**.md'
-       - 'examples/**'
-       - 'test/**'
-       - 'tools/nodejs/**'
-       - 'tools/pythonpkg/**'
-       - 'tools/rpkg/**'
-       - '.github/workflows/**'
-       - '!.github/workflows/Julia.yml'
+  push:
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "examples/**"
+      - "test/**"
+      - "tools/nodejs/**"
+      - "tools/pythonpkg/**"
+      - "tools/rpkg/**"
+      - ".github/workflows/**"
+      - "!.github/workflows/Julia.yml"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref || '' }}-${{ github.base_ref || '' }}-${{ github.ref != 'refs/heads/master' || github.sha }}
   cancel-in-progress: true
@@ -37,9 +37,9 @@ jobs:
 
       - name: Format Check
         run: |
-            cd tools/juliapkg
-            julia -e "import Pkg; Pkg.add(\"JuliaFormatter\")"
-            ./format_check.sh 
+          cd tools/juliapkg
+          julia -e "import Pkg; Pkg.add(\"JuliaFormatter\")"
+          ./format_check.sh
 
   main_julia:
     name: Julia ${{ matrix.version }}
@@ -48,9 +48,9 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.6'
-          - '1.7'
-          - 'nightly'
+          - "1.6"
+          - "1.7"
+          - "nightly"
         os:
           - ubuntu-latest
         arch:
@@ -72,7 +72,7 @@ jobs:
 
       - name: Build DuckDB
         run: |
-            BUILD_TPCH=1 make
+          BUILD_TPCH=1 make
 
       - name: Run Tests
         run: |
