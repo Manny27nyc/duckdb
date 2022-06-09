@@ -40,10 +40,12 @@ jobs:
           python-version: "3.7"
 
       - name: Build
-        run: make debug
+        run: |
+          make debug
 
       - name: Test
-        run: make unittestci
+        run: |
+          make unittestci
 
       - name: Amalgamation
         run: |
@@ -83,10 +85,12 @@ jobs:
           key: ${{ github.job }}
 
       - name: Build
-        run: make
+        run: |
+          make
 
       - name: Unit Test
-        run: make allunit
+        run: |
+          make allunit
 
       - name: Tools Tests
         run: |

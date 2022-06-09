@@ -61,28 +61,35 @@ jobs:
           GEN=ninja EXTENSION_STATIC_BUILD=1 BUILD_TPCH=1 BUILD_HTTPFS=1 STATIC_OPENSSL=1 make
 
       - name: Setup
-        run: ./scripts/node_version.sh upload
+        run: |
+          ./scripts/node_version.sh upload
 
       - name: Node 10
-        run: ./scripts/node_build.sh 10
+        run: |
+          ./scripts/node_build.sh 10
 
       - name: Node 12
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
-        run: ./scripts/node_build.sh 12
+        run: |
+          ./scripts/node_build.sh 12
 
       - name: Node 14
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
-        run: ./scripts/node_build.sh 14
+        run: |
+          ./scripts/node_build.sh 14
 
       - name: Node 15
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
-        run: ./scripts/node_build.sh 15
+        run: |
+          ./scripts/node_build.sh 15
 
       - name: Node 16
-        run: ./scripts/node_build.sh 16
+        run: |
+          ./scripts/node_build.sh 16
 
       - name: Node 17
-        run: ./scripts/node_build.sh 17
+        run: |
+          ./scripts/node_build.sh 17
 
   osx-nodejs:
     if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
@@ -107,28 +114,35 @@ jobs:
           GEN=ninja BUILD_TPCH=1 BUILD_HTTPFS=1 STATIC_OPENSSL=1 make
 
       - name: Setup
-        run: ./scripts/node_version.sh
+        run: |
+          ./scripts/node_version.sh
 
       - name: Node 10
-        run: ./scripts/node_build.sh 10
+        run: |
+          ./scripts/node_build.sh 10
 
       - name: Node 12
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
-        run: ./scripts/node_build.sh 12
+        run: |
+          ./scripts/node_build.sh 12
 
       - name: Node 14
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
-        run: ./scripts/node_build.sh 14
+        run: |
+          ./scripts/node_build.sh 14
 
       - name: Node 15
         if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
-        run: ./scripts/node_build.sh 15
+        run: |
+          ./scripts/node_build.sh 15
 
       - name: Node 16
-        run: ./scripts/node_build.sh 16
+        run: |
+          ./scripts/node_build.sh 16
 
       - name: Node 17
-        run: ./scripts/node_build.sh 17
+        run: |
+          ./scripts/node_build.sh 17
 
   win-nodejs:
     name: node.js Windows
@@ -172,7 +186,8 @@ jobs:
           npm config set msvs_version 2019
 
       - name: Node Version
-        run: ./scripts/node_version.sh
+        run: |
+          ./scripts/node_version.sh
 
       - name: Setup Ccache
         uses: hendrikmuhs/ccache-action@main
@@ -181,4 +196,5 @@ jobs:
           variant: sccache
 
       - name: Node
-        run: ./scripts/node_build_win.sh
+        run: |
+          ./scripts/node_build_win.sh
