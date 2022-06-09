@@ -40,10 +40,12 @@ jobs:
           fetch-depth: 0
 
       - name: Install
+        shell: bash
         run: |
           sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build clang-format && sudo pip3 install cmake-format
 
       - name: Format Check
+        shell: bash
         run: |
           clang-format --version
           clang-format --dump-config
@@ -66,11 +68,13 @@ jobs:
           fetch-depth: 0
 
       - name: Install
+        shell: bash
         run: |
           sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build clang-tidy && sudo pip3 install pybind11[global]
 
       - name: Cache clang-tidy
         id: date
+        shell: bash
         run: |
           echo "::set-output name=now::$(date)"
 
@@ -83,6 +87,7 @@ jobs:
             clang-tidy
 
       - name: Download clang-tidy-cache
+        shell: bash
         run: |
           set -e
           curl -Lo /tmp/clang-tidy-cache https://github.com/ejfitzgerald/clang-tidy-cache/releases/download/v0.4.0/clang-tidy-cache-linux-amd64
@@ -90,6 +95,7 @@ jobs:
           chmod +x /tmp/clang-tidy-cache
 
       - name: Tidy Check
+        shell: bash
         run: |
           make tidy-check TIDY_BINARY=/tmp/clang-tidy-cache
 
@@ -105,10 +111,12 @@ jobs:
           fetch-depth: 0
 
       - name: Install
+        shell: bash
         run: |
           sudo apt-get update -y -qq && sudo apt-get install -y -qq ninja-build lcov curl
 
       - name: Validate Configuration
+        shell: bash
         run: |
           curl --fail --data-binary @.codecov.yml https://codecov.io/validate
 
@@ -118,16 +126,19 @@ jobs:
           python-version: "3.9"
 
       - name: Before Install
+        shell: bash
         run: |
           pip install --prefer-binary "pandas>=1.2.4" "requests>=2.26" "pyarrow==8.0" "psutil>=5.9.0" pytest
           sudo apt-get install g++
 
       - name: Coverage Reset
+        shell: bash
         run: |
           lcov --config-file .github/workflows/lcovrc --zerocounters --directory .
           lcov --config-file .github/workflows/lcovrc --capture --initial --directory . --base-directory . --no-external --output-file coverage.info
 
       - name: Run Tests
+        shell: bash
         run: |
           mkdir -p build/coverage
           (cd build/coverage && cmake -E env CXXFLAGS="--coverage" cmake -DBUILD_SUBSTRAIT_EXTENSION=1 -DBUILD_PYTHON=1 -DBUILD_PARQUET_EXTENSION=1 -DBUILD_JSON_EXTENSION=1 -DENABLE_SANITIZER=0 -DCMAKE_BUILD_TYPE=Debug ../.. && make)
@@ -143,6 +154,7 @@ jobs:
           python tools/shell/shell-test.py build/coverage/duckdb
 
       - name: Generate Coverage
+        shell: bash
         run: |
           lcov --config-file .github/workflows/lcovrc --directory . --base-directory . --no-external --capture --output-file coverage.info
           lcov --config-file .github/workflows/lcovrc --remove coverage.info $(< .github/workflows/lcov_exclude) -o lcov.info
