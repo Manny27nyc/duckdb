@@ -29,15 +29,3 @@ setMethod("dbQuoteIdentifier", signature("duckdb_connection", "SQL"), dbQuoteIde
 #' @rdname duckdb_connection-class
 #' @usage NULL
 setMethod("dbQuoteIdentifier", signature("duckdb_connection", "Id"), dbQuoteIdentifier__duckdb_connection)
-
-reserved_words <- function() {
-  if (is.null(the$reserved_words)) {
-    con <- dbConnect__duckdb_driver(duckdb())
-    on.exit(dbDisconnect__duckdb_connection(con, shutdown = TRUE), add = TRUE)
-
-    rs <- dbSendQuery__duckdb_connection_character(con, "SELECT * FROM duckdb_keywords();")
-    on.exit(dbClearResult__duckdb_result(rs), add = TRUE)
-    the$reserved_words <- dbFetch__duckdb_result(rs)[[1]]
-  }
-  the$reserved_words
-}
