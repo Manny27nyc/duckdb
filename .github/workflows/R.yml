@@ -88,24 +88,6 @@ jobs:
         ./configure
         R CMD build .
 
-    - uses: actions/download-artifact@v3
-      with:
-        name: r-test-extensions
-        path: /tmp/duckdb_extensions
-
-    - name: Tests
-      run: |
-        ls /tmp/duckdb_extensions
-        cd tools/rpkg
-        R CMD INSTALL -d duckdb_*.tar.gz
-        (cd tests && DUCKDB_R_TEST_EXTENSION_REQUIRED=1 R -f testthat.R)
-
-    - name: R CMD check
-      run: |
-        cd tools/rpkg
-        R CMD check --as-cran -o /tmp duckdb_*.tar.gz
-        if grep WARNING /tmp/duckdb.Rcheck/00check.log ; then exit 1; fi
-
     - name: Valgrind
       run: |
         cd tools/rpkg
