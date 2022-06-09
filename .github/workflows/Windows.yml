@@ -192,7 +192,6 @@ jobs:
     - name: Install ODBC Driver
       shell: bash
       run: |
-         |
         tools/odbc/bin/Release/odbc_install.exe //CI //Install
         Reg Query "HKLM\SOFTWARE\ODBC\ODBC.INI\ODBC Data Sources"
         Reg Query "HKLM\SOFTWARE\ODBC\ODBC.INI\DuckDB"
