@@ -39,10 +39,6 @@ SchemaCatalogEntry *Binder::BindSchema(CreateInfo &info) {
 	}
 
 	if (!info.temporary) {
-		// non-temporary create: not read only
-		if (info.schema == TEMP_SCHEMA) {
-			throw ParserException("Only TEMPORARY table names can use the \"temp\" schema");
-		}
 		properties.read_only = false;
 	} else {
 		if (info.schema != TEMP_SCHEMA) {
