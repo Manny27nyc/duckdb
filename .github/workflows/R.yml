@@ -30,13 +30,9 @@ jobs:
   r-test-extension:
     name: Extension for R test
     runs-on: ubuntu-latest
-    container: ubuntu:16.04
 
     steps:
     - uses: actions/checkout@v3
-    - uses: ./.github/actions/ubuntu_16_setup
-      with:
-        openssl: 1
 
     - uses: ./.github/actions/build_extensions
       with:
