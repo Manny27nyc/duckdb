@@ -203,6 +203,7 @@ jobs:
             ./scripts/extension-upload-test.sh local
           fi
 
+
       - uses: actions/upload-artifact@v2
         with:
           name: duckdb-binaries-osx
