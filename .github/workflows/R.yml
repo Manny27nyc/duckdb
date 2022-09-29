@@ -182,7 +182,6 @@ jobs:
       shell: bash
       run: |
         cd tools/rpkg
-        ./configure
         R CMD INSTALL .
 
   rstats-windows:
